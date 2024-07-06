@@ -37,7 +37,7 @@ async def on_message(message):
             search = wikipedia.search(string1, results = 5)
 
             search1 = search[0]
-            result = wikipedia.summary(search1, sentences = 2, auto_suggest=False)
+            result = wikipedia.summary(search1, sentences = 3, auto_suggest=False)
             await working_message.delete()
             await message.channel.send(result)
         except wikipedia.exceptions.PageError:
@@ -48,9 +48,10 @@ async def on_message(message):
             await message.channel.send("Invalid search term. Please try again.")
         except wikipedia.exceptions.DisambiguationError as e:
             await working_message.delete()
-            await message.channel.send("No Results Found. you may be referring to one of these")    
-            for i in range(5):
-                await message.channel.send(e.options[i]) 
+            options_message = "No Results Found. you may be referring to one of these"
+            for i in range(10):
+                options_message += "\n" + str(i+1) + ". " + e.options[i]
+            await message.channel.send(options_message)    
     if message.content.startswith("$help"):
         await message.channel.send("Commands: $hello, $roll, $say, $help,$breakingpointpingspamXD, $wiki")
     if message.content.startswith("$breakingpointpingspamXD"):
